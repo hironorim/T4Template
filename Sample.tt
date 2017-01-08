@@ -1,0 +1,7 @@
+﻿<#@ include file="DefImport.tt" #>
+<# foreach(DefDictionary rowdic in DataFile) { #>
+<#= rowdic["Name"] #>
+<# } #>
+
+<#= SettingFile["SettingName1"] #>
+<#= GetParamValue("TableName") #>

@@ -1,0 +1,9 @@
+No	Name	Type
+1	ProductID	int
+2	ProductName	string
+3	Summary	string
+4	Description	string
+5	CreateUserID	int
+6	UpdateUserID	int
+7	CreateDateTime	DateTime
+8	UpdateDateTime	DateTime
