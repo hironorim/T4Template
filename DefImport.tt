@@ -1,5 +1,9 @@
 ﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="DynamicJson.dll" #>
+<#@ assembly name="Microsoft.Csharp" #>
 <#@ assembly name="Microsoft.VisualBasic.dll" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="Codeplex.Data" #>
 <#@ import namespace="Microsoft.VisualBasic.FileIO" #>
 <#@ import namespace="System" #>
 <#@ import namespace="System.Collections.Generic" #>
@@ -11,7 +15,7 @@ LoadSettingFile();
 #>
 <#+
 List<DefDictionary> DataFile = new List<DefDictionary>();
-DefDictionary SettingFile = new DefDictionary();
+dynamic SettingFile = new DefDictionary();
 
 private void LoadDataFile() {
 	var fileName = this.Host.ResolveParameterValue("", "", "DataFile");
@@ -61,25 +65,7 @@ private void LoadSettingFile() {
 		return;
 	}
 
-	var parser = new TextFieldParser(fileName, Encoding.GetEncoding("Shift_JIS"));
-	if (fileName.EndsWith("tsv"))
-	{
-		parser.SetDelimiters("	");
-	} else {
-		parser.SetDelimiters(",");
-	}
-	
-	while (!parser.EndOfData) {
-		var row = parser.ReadFields();
-		SettingFile[row[0]] = row[1];
-	}
-
-/* debug
-	foreach(var key in SettingFile.Keys) {
-		Write(key + ":" + SettingFile[key]);
-		Write("\r\n");
-	}
-*/
+	SettingFile = DynamicJson.Parse(File.ReadAllText(Host.ResolvePath(fileName)));
 }
 
 private string GetParamValue(string name) {

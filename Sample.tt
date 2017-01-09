@@ -3,5 +3,5 @@
 <#= rowdic["Name"] #>
 <# } #>
 
-<#= SettingFile["SettingName1"] #>
+<#= SettingFile.name #>
 <#= GetParamValue("TableName") #>
