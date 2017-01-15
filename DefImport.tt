@@ -14,8 +14,8 @@ LoadDataFile();
 LoadSettingFile();
 #>
 <#+
-List<DefDictionary> DataFile = new List<DefDictionary>();
-dynamic SettingFile = new DefDictionary();
+List<List<string>> DataFile = new List<List<string>>();
+dynamic SettingFile;
 
 private void LoadDataFile() {
 	var fileName = this.Host.ResolveParameterValue("", "", "DataFile");
@@ -32,19 +32,8 @@ private void LoadDataFile() {
 		parser.SetDelimiters(",");
 	}
 
-	var header = parser.ReadFields();
 	while (!parser.EndOfData) {
-		var row = parser.ReadFields();
-		var rowdic = new DefDictionary();
-		DataFile.Add(rowdic);
-
-		for(var i = 0; i < header.Length; i++) {
-			if (i > (row.Length - 1)) {
-				rowdic[header[i]] = String.Empty;
-			} else {
-				rowdic[header[i]] = row[i];
-			}
-		}
+		DataFile.Add(new List<string>(parser.ReadFields()));
 	}
 
 /* debug
@@ -71,102 +60,4 @@ private void LoadSettingFile() {
 private string GetParamValue(string name) {
 	return this.Host.ResolveParameterValue("", "", name);
 }
-
-private string GetInputControlID(DefDictionary rowdic) {
-	var prefix = String.Empty;
-	switch(rowdic["Type"]) {
-		case "TextBox":
-			prefix = "txt";
-			break;
-		case "NumTextBox":
-			prefix = "txt";
-			break;
-		case "TextEditor":
-			prefix = "te";
-			break;
-		case "URL":
-			prefix = "url";
-			break;
-		case "Flg":
-			prefix = "chk";
-			break;
-		case "DateTime":
-			prefix = "txt";
-			break;
-		case "Url":
-			prefix = "url";
-			break;
-		case "DropDownList":
-			prefix = "ddl";
-			break;
-		case "RadioButtonList":
-			prefix = "rdo";
-			break;
-		case "CheckBoxList":
-			prefix = "chk";
-			break;
-		//他に必要になったらその都度追加
-	}
-	
-	return GetInputControlID(rowdic, prefix);
-}
-
-
-private string NULLOrValue(string value) {
-	if (String.IsNullOrEmpty(value)) {
-		return "NULL";
-	}
-	
-	return value;
-}
-
-private string NULLOrValue(string value, string rtnValue) {
-	if (String.IsNullOrEmpty(value)) {
-		return "NULL";
-	}
-	
-	return rtnValue;
-}
-
-private string GetInputControlID(DefDictionary rowdic, String prefix) {
-	return prefix + rowdic["EName"];
-}
-
-private bool SearchDef(List<DefDictionary> list, string key, string value) {
-	var exits = false;
-	
-	foreach(var rowdic in DataFile) {
-        var parsedValue = string.Empty;
-        if (rowdic.TryGetValue(key, out parsedValue))
-        {
-            if (parsedValue == value) {
-                exits = true;
-            }
-        }
-	}
-	
-	return exits;
-}
-
-public class DefDictionary : Dictionary<string, string>
-{
-    public new string this[string key]
-    {
-        get
-        {
-            var value = string.Empty;
-            if (!this.TryGetValue(key, out value))
-            {
-                //value = string.Format("[NoExits:{0}]", key);
-            }
-
-            return value;
-        }
-        set
-        {
-            base[key] = value;
-        }
-    }
-}
 #>
-

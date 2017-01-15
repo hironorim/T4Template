@@ -1,2 +1,0 @@
-Set-Item Env:Path (Get-ChildItem "C:\Program Files (x86)\Common Files\Microsoft Shared\TextTemplating" | Select-Object -Last 1).FullName
-TextTransform.exe Sample.tt -o Output.txt -a !!DataFile!Products.tsv -a !!SettingFile!Setting.json -a !!TableName!Products

@@ -1,0 +1,9 @@
+﻿<#@ include file="DefImport.tt" #>
+CREATE TABLE <#= GetParamValue("TableName") #> (
+<# foreach(var rowList in DataFile) {
+int no = 0;
+if (!int.TryParse(rowList[0], out no)) { continue; }
+#>
+  <#= rowList[1] #>  <#= rowList[2] #>,
+<# } #>
+)

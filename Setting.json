@@ -1,9 +1,0 @@
-{
-    "name": "Person",
-    "ns":  "Test.Types",
-    "properties": [
-        { "name": "FamilyName", "type": "string" },
-        { "name": "FirstName", "type": "string" },
-        { "name": "BirthDay", "type": "DateTime" }
-    ]
-}
